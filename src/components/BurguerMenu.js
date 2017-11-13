@@ -8,28 +8,22 @@ class BurguerMenu extends Component {
     this.state = {
       menu: {
         items: [
-          <a key="0" href="">
+          <Link key={"home"} to={"/"}>
             <i className="fa fa-fw fa-star-o" />
-            <Link to={"/"}>
-              <span>Home</span>
-            </Link>
-          </a>,
-          <a key="0" href="">
+            <span>Home</span>
+          </Link>,
+          <Link key={"talentos"} to={"/talentos"}>
             <i className="fa fa-fw fa-star-o" />
-            <Link to={"/talentos"}>
-              <span>Talentos</span>
-            </Link>
-          </a>,
-          <a key="1" href="">
+            <span>Talentos</span>
+          </Link>,
+          <Link key={"planos"} to={"/planos"}>
             <i className="fa fa-fw fa-bar-chart-o" />
-            <Link to={"/planos"}>
-              <span>Planos Contratuais</span>
-            </Link>
-          </a>,
-          <a key="2" href="">
+            <span>Planos Contratuais</span>
+          </Link>,
+          <Link key={"analise"} to={"/planos"}>
             <i className="fa fa-fw fa-bar-chart-o" />
             <span>Análise</span>
-          </a>
+          </Link>
         ]
       }
     };

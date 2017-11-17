@@ -3,8 +3,8 @@ import { RadialChart } from "react-vis";
 import "../../node_modules/react-vis/dist/style.css";
 
 import BurguerMenu from "./BurguerMenu";
-import List from "./List";
-import EmployeeListItem from "./EmployeeListItem";
+import List from "./custom/List";
+import EmployeeListItem from "./custom/EmployeeListItem";
 
 class Employees extends Component {
   constructor(props) {

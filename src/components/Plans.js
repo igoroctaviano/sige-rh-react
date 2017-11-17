@@ -17,7 +17,7 @@ class Plans extends Component {
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <RadialChart data={data} width={300} height={300} showLabels animation />
         </div>
-      </BurguerMenu>
+      </BurguerMenu> 
     );
   }
 }

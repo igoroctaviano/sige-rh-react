@@ -12,6 +12,10 @@ class BurguerMenu extends Component {
             <i className="fa fa-fw fa-star-o" />
             <span>Home</span>
           </Link>,
+          <Link key={"analise"} to={"/vagas"}>
+            <i className="fa fa-fw fa-bar-chart-o" />
+            <span>Vagas</span>
+          </Link>,
           <Link key={"talentos"} to={"/talentos"}>
             <i className="fa fa-fw fa-star-o" />
             <span>Talentos</span>

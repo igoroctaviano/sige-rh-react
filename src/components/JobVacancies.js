@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import ReactList from "react-list";
 
 import BurguerMenu from "./BurguerMenu";
-import ReactList from "react-list";
 
 class JobVacancies extends Component {
   constructor(props) {
@@ -19,8 +19,8 @@ class JobVacancies extends Component {
       .then(employeeTypes => this.setState({ employeeTypes: employeeTypes }))
       .catch(error =>
         console.log(
-          "Ops! Something went wrong while trying to get the employee types! Look: " +
-            error
+          "Ops! Something went wrong while trying to fetch the employee types! Look: " +
+            error.message
         )
       );
   }

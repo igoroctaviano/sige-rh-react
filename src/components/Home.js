@@ -7,23 +7,9 @@ class Home extends Component {
     super(props);
   }
 
-  postEmployees() {
-    fetch("https://cc21633f.ngrok.io/vagas", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: JSON.stringify({
-        uid: "teste",
-        employeeTypes: ["asdadsd", "asdasdasd"]
-      })
-    });
-  }
-
   render() {
     return (
       <BurguerMenu>
-        <button onClick={this.postEmployees.bind(this)}>Post employee</button>
         <h1>
           <a href="https://github.com/igoroctaviano/sige-rh">SIGE RH</a>
         </h1>

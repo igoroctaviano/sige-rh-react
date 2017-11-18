@@ -11,14 +11,13 @@ class Home extends Component {
     fetch("https://cc21633f.ngrok.io/vagas", {
       method: "POST",
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/x-www-form-urlencoded"
       },
-      body: {
-        id: "teste",
-        employees: ["asdadsd", "asdasdasd"]
-      }
-    }).then(e => console.log(e.json()));
+      body: JSON.stringify({
+        uid: "teste",
+        employeeTypes: ["asdadsd", "asdasdasd"]
+      })
+    });
   }
 
   render() {

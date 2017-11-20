@@ -5,7 +5,6 @@ import registerServiceWorker from "./registerServiceWorker";
 
 import Home from "./components/Home";
 import Employees from "./components/Employees";
-import Plans from "./components/Plans";
 import JobVacancies from "./components/JobVacancies";
 
 const Routes = () => (
@@ -13,7 +12,6 @@ const Routes = () => (
     <Switch>
       <Route exact path="/" component={Home} />,
       <Route path="/talentos" component={Employees} />
-      <Route path="/planos" component={Plans} />
       <Route path="/vagas" component={JobVacancies} />
     </Switch>
   </Router>

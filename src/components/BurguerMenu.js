@@ -19,14 +19,6 @@ class BurguerMenu extends Component {
           <Link key={"talentos"} to={"/talentos"}>
             <i className="fa fa-fw fa-star-o" />
             <span>Talentos</span>
-          </Link>,
-          <Link key={"planos"} to={"/planos"}>
-            <i className="fa fa-fw fa-bar-chart-o" />
-            <span>Planos Contratuais</span>
-          </Link>,
-          <Link key={"analise"} to={"/planos"}>
-            <i className="fa fa-fw fa-bar-chart-o" />
-            <span>Análise</span>
           </Link>
         ]
       }

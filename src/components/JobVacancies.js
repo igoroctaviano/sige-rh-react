@@ -14,7 +14,7 @@ class JobVacancies extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:10010/employee/type")
+    fetch("https://sige-rh.herokuapp.com/employee/type")
       .then(data => data.json())
       .then(employeeTypes => this.setState({ employeeTypes: employeeTypes }))
       .catch(error =>
@@ -121,7 +121,7 @@ class JobVacancies extends Component {
             <h3>Tipos</h3>
             <ReactList
               itemRenderer={this.renderEmployeeTypeItem.bind(this)}
-              length={employeeTypes.length}
+              length={employeeTypes.length - 1}
               type="uniform"
             />
           </div>
@@ -130,7 +130,7 @@ class JobVacancies extends Component {
             {selectedEmployeeTypes.length > 0 ? (
               <ReactList
                 itemRenderer={this.renderSelectedEmployeeTypeItem.bind(this)}
-                length={selectedEmployeeTypes.length}
+                length={selectedEmployeeTypes.length - 1}
                 type="uniform"
               />
             ) : (
@@ -138,11 +138,7 @@ class JobVacancies extends Component {
             )}
           </div>
         </div>
-        <a
-          className="special-btn"
-          href="javascript:void(0)"
-          onClick={this.sendJobVacancies.bind(this)}
-        >
+        <a className="special-btn" onClick={this.sendJobVacancies.bind(this)}>
           Enviar requisição
         </a>
       </BurguerMenu>

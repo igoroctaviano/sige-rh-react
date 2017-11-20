@@ -22,15 +22,54 @@ class Employees extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:10010/employee")
+    fetch("https://sige-rh.herokuapp.com/employee")
       .then(response => response.json())
-      .then(employees => this.setState({ employees: employees }))
+      .then(employees =>
+        this.setState({
+          employees: employees,
+          chartData: [
+            {
+              angle: employees.reduce(
+                (last, curr) => last + (curr.isAllocated ? 1 : 0),
+                0
+              ),
+              label: "Alocados",
+              subLabel: "Quantidade",
+              radius: 1.1
+            },
+            {
+              angle: employees.reduce(
+                (last, curr) => last + (!curr.isAllocated ? 1 : 0),
+                0
+              ),
+              label: "Não alocados",
+              radius: 1.2
+            }
+          ]
+        })
+      )
       .catch(error =>
         console.log(
           "Ops! Something went wrong when trying to fetch employees! Look: " +
             error.message
         )
       );
+  }
+
+  renderEmployeeFullItem(index, key) {
+    console.log(index);
+    const { employees } = this.state;
+    return (
+      <div style={{ cursor: "pointer", padding: 5, borderRadius: 15, backgroundColor: `${ index % 2 == 0 ? 'rgb(195, 200, 221)' : '' }` }} key={key}>
+        <p style={{ fontWeight: "bold" }}>
+          {employees[index].name.first + " " + employees[index].name.last}
+        </p>
+        <p>{employees[index].salary}</p>
+        <p>{employees[index].registered}</p>
+        <p>{employees[index].phone}</p>
+        <p>{employees[index].type}</p>
+      </div>
+    );
   }
 
   renderEmployeeItem(index, key) {
@@ -42,18 +81,6 @@ class Employees extends Component {
         onClick={() => this.selectEmployee(employees[index])}
       >
         {employees[index].name.first + " " + employees[index].name.last}
-        <a
-          style={{
-            padding: 15,
-            backgroundColor: "transparent",
-            color: "white",
-            cursor: "pointer",
-            fontWeight: "bold"
-          }}
-          onClick={() => this.unselectEmployee(index)}
-        >
-          x
-        </a>
       </div>
     );
   }
@@ -62,7 +89,9 @@ class Employees extends Component {
     const { selectedEmployees } = this.state;
     return (
       <div key={key}>
-        {selectedEmployees[index].name.first + " " + selectedEmployees[index].name.last}
+        {selectedEmployees[index].name.first +
+          " " +
+          selectedEmployees[index].name.last}
         <a
           style={{
             padding: 15,
@@ -98,6 +127,8 @@ class Employees extends Component {
   render() {
     const { chartData, selectedEmployees, employees } = this.state;
 
+    console.log(employees);
+
     return (
       <BurguerMenu>
         <div
@@ -129,7 +160,7 @@ class Employees extends Component {
               <h3>Talentos</h3>
               <ReactList
                 itemRenderer={this.renderEmployeeItem.bind(this)}
-                length={employees.length}
+                length={employees.length - 1}
                 type="uniform"
               />
             </div>
@@ -138,7 +169,7 @@ class Employees extends Component {
               {selectedEmployees.length > 0 ? (
                 <ReactList
                   itemRenderer={this.renderSelectedEmployeeItem.bind(this)}
-                  length={selectedEmployees.length}
+                  length={selectedEmployees.length - 1}
                   type="uniform"
                 />
               ) : (
@@ -146,9 +177,19 @@ class Employees extends Component {
               )}
             </div>
           </div>
-          <a className="special-btn" onClick={() => console.log('')}>
+          <a className="special-btn" onClick={() => console.log("")}>
             Enviar requisição
           </a>
+          <div style={{ padding: 20 }}>
+            <h2>Talentos</h2>
+          </div>
+          <div style={{ padding: 10, overflow: "auto", height: '100%', maxHeight: 400, width: '100%' }}>
+            <ReactList
+              itemRenderer={this.renderEmployeeFullItem.bind(this)}
+              length={employees.length - 1}
+              type="uniform"
+            />
+          </div>
         </div>
       </BurguerMenu>
     );

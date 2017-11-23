@@ -16,12 +16,54 @@ class Employees extends Component {
         { angle: 5, label: "Não alocados", radius: 1.2 },
         { angle: 2, label: "Aguardando alocação" }
       ],
+      chartDataPlans: [
+        {
+          angle: 1,
+          label: "Alocados",
+          subLabel: "Quantidade",
+          radius: 1.1
+        },
+        { angle: 5, label: "Não alocados", radius: 1.2 },
+        { angle: 2, label: "Aguardando alocação" }
+      ],
       employees: [],
+      plans: [],
       selectedEmployees: []
     };
   }
 
-  componentDidMount() {
+  getPlans() {
+    fetch("https://sige-rh.herokuapp.com/plan")
+      .then(response => response.json())
+      .then(plans =>
+        this.setState({
+          plans: plans,
+          chartDataPlans: [
+            {
+              angle: plans.reduce(
+                (last, curr) => last + (curr.isApproved ? 1 : 0),
+                0
+              ),
+              label: "Aprovados",
+              subLabel: "Quantidade*",
+              radius: 1.1,
+              style: { fill: 'green', fillOpacity: 0.533, stroke: 0 }
+            },
+            {
+              angle: plans.reduce(
+                (last, curr) => last + (!curr.isApproved ? 1 : 0),
+                0
+              ),
+              label: "Não aprovados",
+              radius: 1.2,
+              style: { fill: 'red', fillOpacity: 0.533, stroke: 0 }
+            }
+          ]
+        })
+      );
+  }
+
+  getEmployees() {
     fetch("https://sige-rh.herokuapp.com/employee")
       .then(response => response.json())
       .then(employees =>
@@ -34,7 +76,7 @@ class Employees extends Component {
                 0
               ),
               label: "Alocados",
-              subLabel: "Quantidade",
+              subLabel: "Quantidade*",
               radius: 1.1
             },
             {
@@ -56,18 +98,53 @@ class Employees extends Component {
       );
   }
 
+  renderPlanFullItem(index, key) {
+    console.log(index);
+    const { plans } = this.state;
+    return (
+      <div
+        style={{
+          cursor: "pointer",
+          padding: 5,
+          borderRadius: 15,
+          backgroundColor: `${index % 2 === 0 ? "rgb(195, 200, 221)" : ""}`
+        }}
+        key={key}
+      >
+        <p style={{ fontWeight: "bold" }}>
+          {"Cliente: " + plans[index].client}
+        </p>
+        <p>
+          {plans[index].isApproved ? "Está aprovado." : "Não está aprovado."}
+        </p>
+        <p>{"Salário: " + plans[index].salary}</p>
+        <p>{"Registrado no banco em " + plans[index].registered}</p>
+      </div>
+    );
+  }
+
   renderEmployeeFullItem(index, key) {
     console.log(index);
     const { employees } = this.state;
     return (
-      <div style={{ cursor: "pointer", padding: 5, borderRadius: 15, backgroundColor: `${ index % 2 == 0 ? 'rgb(195, 200, 221)' : '' }` }} key={key}>
+      <div
+        style={{
+          cursor: "pointer",
+          padding: 5,
+          borderRadius: 15,
+          backgroundColor: `${index % 2 === 0 ? "rgb(195, 200, 221)" : ""}`
+        }}
+        key={key}
+      >
         <p style={{ fontWeight: "bold" }}>
           {employees[index].name.first + " " + employees[index].name.last}
         </p>
-        <p>{employees[index].salary}</p>
-        <p>{employees[index].registered}</p>
-        <p>{employees[index].phone}</p>
-        <p>{employees[index].type}</p>
+        <p>
+          {employees[index].isAllocated ? "Está alocado." : "Não está alocado."}
+        </p>
+        <p>{"Salário: " + employees[index].salary}</p>
+        <p>{"Registrado no banco em " + employees[index].registered}</p>
+        <p>{"Telefone: " + employees[index].phone}</p>
       </div>
     );
   }
@@ -124,8 +201,19 @@ class Employees extends Component {
     });
   }
 
+  componentDidMount() {
+    this.getPlans();
+    this.getEmployees();
+  }
+
   render() {
-    const { chartData, selectedEmployees, employees } = this.state;
+    const {
+      chartData,
+      chartDataPlans,
+      selectedEmployees,
+      employees,
+      plans
+    } = this.state;
 
     console.log(employees);
 
@@ -139,13 +227,29 @@ class Employees extends Component {
           }}
         >
           <h1>Talentos Dashboard</h1>
-          <RadialChart
-            data={chartData}
-            width={300}
-            height={300}
-            showLabels
-            animation
-          />
+          <div style={{ display: "flex", flexDirection: "row", padding: 20 }}>
+            <div>
+              <h3>Talentos</h3>
+              <RadialChart
+                data={chartData}
+                width={300}
+                height={300}
+                showLabels
+                animation
+              />
+            </div>
+            <div>
+              <h3>Planos Contratuais</h3>
+              <RadialChart
+                data={chartDataPlans}
+                width={300}
+                height={300}
+                showLabels
+                animation
+              />
+            </div>
+          </div>
+          <h2>Requisição de Plano Contratual</h2>
           <div
             style={{
               display: "flex",
@@ -180,15 +284,39 @@ class Employees extends Component {
           <a className="special-btn" onClick={() => console.log("")}>
             Enviar requisição
           </a>
-          <div style={{ padding: 20 }}>
-            <h2>Talentos</h2>
-          </div>
-          <div style={{ padding: 10, overflow: "auto", height: '100%', maxHeight: 400, width: '100%' }}>
-            <ReactList
-              itemRenderer={this.renderEmployeeFullItem.bind(this)}
-              length={employees.length - 1}
-              type="uniform"
-            />
+          <div style={{ padding: 20, display: "flex", flexDirection: "row" }}>
+            <div
+              style={{
+                padding: 10,
+                overflow: "auto",
+                height: "100%",
+                maxHeight: 400,
+                width: "100%"
+              }}
+            >
+              <h2>Planos Contratuais</h2>
+              <ReactList
+                itemRenderer={this.renderPlanFullItem.bind(this)}
+                length={plans.length - 1}
+                type="uniform"
+              />
+            </div>
+            <div
+              style={{
+                padding: 10,
+                overflow: "auto",
+                height: "100%",
+                maxHeight: 400,
+                width: "100%"
+              }}
+            >
+              <h2>Talentos</h2>
+              <ReactList
+                itemRenderer={this.renderEmployeeFullItem.bind(this)}
+                length={employees.length - 1}
+                type="uniform"
+              />
+            </div>
           </div>
         </div>
       </BurguerMenu>
